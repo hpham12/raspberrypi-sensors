@@ -10,8 +10,11 @@ sensor = adafruit_dht.DHT22(board.D26)
 # Uncomment for DHT11
 #sensor = adafruit_dht.DHT11(board.D4)
 
-ADAFRUIT_USERNAME=os.getenv("MQTT_USERNAME")
-ADAFRUIT_KEY=os.getenv("MQTT_KEY")
+ADAFRUIT_USERNAME = ""
+ADAFRUIT_KEY = ""
+
+#ADAFRUIT_USERNAME = os.getenv("MQTT_USERNAME”)
+#ADAFRUIT_KEY= os.getenv("MQTT_KEY”)
 
 ioClient=Client(ADAFRUIT_USERNAME, ADAFRUIT_KEY)
 groupName="sensors"
@@ -29,11 +32,7 @@ while True:
         # Print the values to the serial port
         temperature_c = sensor.temperature
         humidity = sensor.humidity
-        messageJsonTemplate = '''{{
-            "rack": {rack},
-            "temperature": {temp},
-            "humidity: {humidity}
-        }}'''
+        messageJsonTemplate = '{{"rack": {rack},"temperature": {temp},"humidity": {humidity}}}'
 
         message = messageJsonTemplate.format(rack=rack, temp=temperature_c, humidity=humidity)
         ioClient.send_data(key, message)
